@@ -162,11 +162,11 @@ class DokuPaymentController extends Controller
         // ]);
 
         $headers = [
-            'Content-Type' => 'application/json',
+           'Content-Type' => 'application/json',
             'Client-Id' => $clientId,
             'Request-Id' => $requestId,
             'Request-Timestamp' => $currentDateTimeUTC,
-            'Signature' => $headerSignature
+            'Signature' => "HMACSHA256=" . $signature
         ];
 
         // $body = [
@@ -174,13 +174,7 @@ class DokuPaymentController extends Controller
 
         // ];
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Client-Id' => $clientId,
-            'Request-Id' => $requestId,
-            'Request-Timestamp' => $currentDateTimeUTC,
-            'Signature' => $signature
-        ])->post($baseUrl.$targetPath, json_encode($requestBody));
+        $response = Http::withHeaders($headers)->post($baseUrl.$targetPath,  $requestBody);
 
         return $response;
     }
